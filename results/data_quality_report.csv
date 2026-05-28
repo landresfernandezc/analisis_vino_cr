@@ -1,0 +1,11 @@
+﻿metrica,valor
+filas_raw,44.0
+filas_clean,43.0
+duplicados_raw,0.0
+faltantes_precio_final_raw,1.0
+retailers,3.0
+categorias,3.0
+precio_min_750ml,1747.5
+precio_promedio_750ml,6801.92
+precio_mediana_750ml,6110.0
+precio_max_750ml,18495.0

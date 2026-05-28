@@ -1,0 +1,53 @@
+project:
+  name: tfm_vino_cr_2025
+  extraction_date: '2026-05-27'
+  results_dir: results
+
+scraping_sources:
+  - retailer: Walmart Costa Rica
+    base_url: https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos
+    enabled: true
+    categories:
+      - name: Vino tinto
+        url: https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto
+      - name: Vinos general
+        url: https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6
+  - retailer: Masxmenos Costa Rica
+    base_url: https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos
+    enabled: true
+    categories:
+      - name: Vino blanco
+        url: https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco
+      - name: Vino rosado
+        url: https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado
+      - name: Frontera
+        url: https://www.masxmenos.cr/frontera
+  - retailer: PriceSmart Costa Rica
+    base_url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/G10D08014
+    enabled: true
+    categories:
+      - name: Vino tinto
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011
+      - name: Vino blanco
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-blanco-G10D08014019/G10D08014019
+      - name: Vino rosado
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-rosado-G10D08014012/G10D08014012
+
+api_sources:
+  - institution: BCCR
+    name: Indicadores Económicos
+    status: viable
+    requires_token: true
+    url: https://www.bccr.fi.cr/indicadores-economicos/Paginas/APIs.aspx
+  - institution: PROCOMER
+    name: Portal Estadístico ODATA
+    status: viable_pending_endpoint_validation
+    url: https://servicios.procomer.go.cr/PortalEstadistico/
+  - institution: INEC
+    name: Datos Abiertos INEC
+    status: viable
+    url: https://datosabiertos.inec.cr/
+  - institution: ICT
+    name: Cifras Turísticas
+    status: viable_file_extraction
+    url: https://www.ict.go.cr/es/administrar-estadistica/cifras-tur%C3%ADsticas.html
