@@ -1,7 +1,7 @@
 # Instalacion local
 
-Este proyecto es una aplicacion/paquete Python para regenerar datasets CSV a partir de
-archivos ya incluidos en `results/`.
+Este proyecto es una aplicacion/paquete Python para extraer precios por scraping en vivo,
+guardar el CSV raw y regenerar datasets limpios en `results/`.
 
 ## Requisitos
 
@@ -20,7 +20,7 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
 pip install -r requirements.txt
-python -m src.pipeline
+python -m src.pipeline --no-verify-ssl
 ```
 
 Si no tienes Python 3.12 instalado, instala Python 3.12 desde python.org y vuelve a ejecutar
@@ -54,9 +54,24 @@ python -m src.pipeline
 
 debe terminar con el mensaje `Pipeline finalizado correctamente` y regenerar estos archivos:
 
+- `results/webscraping_precios_vino_raw.csv`
 - `results/webscraping_precios_vino_clean.csv`
 - `results/eda_resumen_por_retailer_categoria.csv`
 - `results/data_quality_report.csv`
+
+Por defecto, `python -m src.pipeline` ejecuta scraping en vivo usando
+`src/config/sources.yaml`. Para usar el CSV raw ya existente:
+
+```powershell
+python -m src.pipeline --from-existing
+```
+
+En algunos entornos Windows puede aparecer un error SSL al consultar los retailers. En ese
+caso usa:
+
+```powershell
+python -m src.pipeline --no-verify-ssl
+```
 
 ## Instalacion realizada en este equipo
 
@@ -77,7 +92,7 @@ O, si prefieres activar el entorno manualmente:
 
 ```powershell
 C:\Users\luisa\.venvs\tfm_vino_cr\Scripts\Activate.ps1
-python -m src.pipeline
+python -m src.pipeline --no-verify-ssl
 ```
 
 ## Variables para BCCR
@@ -92,11 +107,17 @@ $env:BCCR_TOKEN="tu-token"
 
 ## Notas
 
-- `data/raw/` y `data/processed/` estan vacios; los datos usados por el pipeline estan en
-  `results/`.
+- `data/raw/` y `data/processed/` estan vacios; los datos generados por el pipeline estan
+  en `results/`.
 - No hay aplicacion Streamlit en el codigo actual, aunque `streamlit` aparece en
   `requirements.txt`.
-- No hay pruebas automatizadas implementadas en `tests/`.
+- Hay pruebas automatizadas para el parseo de precios en `tests/`.
+
+## Pruebas
+
+```powershell
+python -m pytest tests
+```
 
 ## Problema conocido: Python 3.14
 
