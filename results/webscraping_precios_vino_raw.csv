@@ -1,45 +1,144 @@
-fecha_extraccion,retailer,categoria,producto,precio_lista_crc,precio_oferta_crc,descuento_pct,presentacion_ml,url_fuente,tipo_extraccion
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino Clos De Pirque Cabernet Sauvignon - 1000ml,3070,2620,15,1000,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Dadá finca las moras - 750 ml,9560,6692,30,750,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino Viña Maipo Clasic Series Merlot - 750 ml,3980,3140,21,750,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Don Simón Tempranillo -750 ml,1980,,0,750,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino blanco,Vino Casillero del Diablo Reserva Española Sauvignon Blanc - 750 ml,8800,,0,750,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino Viña Maipo Varietal Merlot 1.5L,6310,,0,1500,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino rosado,Vino Trapiche Rose Argentino - 750ml,5460,,0,750,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino Tinto Toro Bravo Tempranillo Merlot -750 ml,9300,4650,50,750,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino Trapiche Malbec Reserve -750 ml,8230,6173,25,750,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino Tarapacá Tinto Cabernet Sauvignon - 750ml,5210,4500,14,750,https://www.walmart.co.cr/tarapac-vineyard-cabernet-sauvignon-750-2/p,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Bicicleta pinot noir reserva 2020 - 750 ml,8100,,0,750,https://www.walmart.co.cr/vino-tinto-bicicleta-pinot-noir-750ml/p,web_search_scraping
-2026-05-27,Walmart Costa Rica,Vino tinto,Vino Caliterra Tinto Merlot - 750ml,6600,5280,20,750,https://www.walmart.co.cr/caliterra,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Clos De Pirque Blanco - 1000ml,3100,,0,1000,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Fantini Pinot Grigio - 750ml,6110,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Twin View Cabernet 750ml,5000,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Don Simon Premium Chardonnay - 1000ml,2330,,0,1000,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Frontera Chardonnay Blanco 750 Ml,6070,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Ruffino Blanco Orvieto -750ml,8150,6520,20,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Maipo blanco Chardonnay -1.5 L,7530,6420,15,1500,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Blanco Toro Bravo Verde Sauvignon -750 ml,9300,4650,50,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rose D' Anjou Soupcon De Fruit -750ml,8020,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Frontera Spritzer Rose -750ml,5770,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino rosado,Canti Prosseco Vino Rosado Esp Ita 750ml,10470,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino orgánico Adobe rosé – 375 ml,4900,,0,375,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Laudum Chardonnay 750 Ml,9200,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Im Your Organic rosé - 750 ml,5310,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino rosado Cono Sur bicicleta pinot noir - 750 ml,8250,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Adobe Rosado Botella - 750ml,10760,,0,750,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino tinto,Vino Frontera Concha y Toro Merlot - 750ml,5930,,0,750,https://www.masxmenos.cr/frontera,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino tinto,Frontera Carmenere 750 Ml,5930,,0,750,https://www.masxmenos.cr/frontera,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino tinto,Vino Frontera After Midnight Tinto Concha y Toro - 750ml,6550,,0,750,https://www.masxmenos.cr/frontera,web_search_scraping
-2026-05-27,Masxmenos Costa Rica,Vino tinto,Vino Chateau Tour France Botella - 750ml,11790,,0,750,https://www.masxmenos.cr/vino-chateau-tour-france-botella-750ml/p,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino tinto,Muga Vino Tinto Español El Anden de la Estación 750 mL,15495,,0,750,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino tinto,Ramon Bilbao Vino Tinto Crianza 750 mL,11295,,0,750,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino tinto,Peñasol Sangría Lista para Servir 3 L,,,0,3000,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino blanco,Protos Verdejo Vino Blanco 750 mL,7395,,0,750,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-blanco-G10D08014019/G10D08014019,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino blanco,Las Moras Pinot Grigio Vino Blanco Botella de 750 mL / 25.4 oz,5295,,0,750,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-blanco-G10D08014019/G10D08014019,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino rosado,Soupçon de Fruit Rosé d'Anjou Botella de Vino Rosado 750 mL / 25.4 oz,7795,,0,750,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-rosado-G10D08014012/G10D08014012,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino rosado,Sandara Sparkling Vino Rosado Botella de 750 mL / 25.4 oz,5795,,0,750,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-rosado-G10D08014012/G10D08014012,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino tinto,Santa Rita 120 Reserva Especial Vino Tinto 4 Unidades / 187.5 mL / 6.3 oz,7495,,0,750,https://www.pricesmart.com/es-cr/producto/santa-rita-120-reserva-especial-vino-tinto-4-unidades-187-5-ml-6-3-oz-205181/205181,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino tinto,La Crema Pinot Noir Monterey 2019 Vino Tinto Premium 750 mL,18495,,0,750,https://www.pricesmart.com/es-cr/busqueda?page=13&q=Vino+Tinto,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino tinto,Montecillo Rioja Crianza Vino Tinto 750 mL,9470,,0,750,https://www.pricesmart.com/es-cr/busqueda?page=13&q=Vino+Tinto,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino tinto,Trivento Reserva Malbec 2 Unidades / 750 mL + Sales Parrilleras,14495,,0,1500,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/G10D08014?page=12,web_search_scraping
-2026-05-27,PriceSmart Costa Rica,Vino tinto,Gato Negro Cabernet Sauvignon Vino Tinto 1.5 L / 51 oz,6795,,0,1500,https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/G10D08014?page=12,web_search_scraping
+﻿fecha_extraccion,retailer,categoria,producto,precio_lista_crc,precio_oferta_crc,descuento_pct,presentacion_ml,url_fuente,tipo_extraccion
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Clos De Pirque Cabernet Sauvignon - 1000ml,2620.0,,0,1000.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Dadá finca las moras - 750 ml,6692.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Viña Maipo Clasic Series Merlot - 750 ml,3140.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Don Simón Tempranillo -750 ml,1980.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Clos De Pirque Tinto Merlot - 1000ml,2950.0,,0,1000.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Navarro Colección Privada Vero Faraone Malbec - 750ml,11630.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Frontera Merlot -1500 ml,7500.0,,0,1500.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Contenda merlot - 750 ml,3190.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto San Telmo malbec botella - 750 ml,5550.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Santa Carolina Merlot Botella - 750ml,5685.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Tinto Ramon Bilbao Rioja Crianza -750ml,8224.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Santa Cecilia Tinto Cabernet Sauvignon -750 ml,3500.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Clos Dp Cabernet Tinto Sauvignon - 2000Ml,4460.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Frontera Concha y Toro Merlot - 750ml,5940.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,2 Pack Sangria Peñasol Tinta -1000ml,4650.0,,0,1000.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Don Simon Premium Merlot - 1000ml,2200.0,,0,1000.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Chateau Tour France Botella - 750ml,11770.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Clos De Pirque Carmenere - 1000ml,2620.0,,0,1000.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Viña Maipo classic series cabernet sauvignon -750 ml,3140.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto 19 Crimes cali red - 750 ml,13170.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Casillero Del Diablo Merlot - 750Ml,8120.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Clos De Pirque Cabernet Sauvignon - 1000ml Vendido por Walmart,9560.0,,0,1000.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Dadá finca las moras - 750 ml Vendido por Walmart,3980.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Viña Maipo Clasic Series Merlot - 750 ml Vendido por Walmart,1980.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Don Simón Tempranillo -750 ml Vendido por Walmart,2950.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Clos De Pirque Tinto Merlot - 1000ml Vendido por Walmart,11630.0,,0,1000.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino Frontera Merlot -1500 ml Vendido por Walmart,3190.0,,0,1500.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino tinto Contenda merlot - 750 ml Vendido por Walmart,5550.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vino tinto,Vino San Telmo Malbec - 750ml Vendido por Walmart,7580.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos/vino-tinto,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Bco Sta Julia Dulc Chenin 750mlx6,7720.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Soupcon de fruit rose d&apos;anjou 2020 - 750 ml,8020.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Riunite blanco melocotón - 750 ml,6060.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Mr Wild Caber Savign 750 ml,11150.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Casillero del Diablo Reserva Española Sauvignon Blanc - 750 ml,8800.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Viña Maipo Varietal Merlot 1.5L,6310.0,,0,1500.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino rosado Trapiche vineyards argentino - 750 ml,5460.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Tinto Toro Bravo Tempranillo Merlot -750 ml,4650.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Trapiche Malbec Reserve -750 ml,6173.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Condado de Haza Ribera tinto - 750 ml,11468.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Bread Y Butter Merlot 750 Ml,11088.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Protos Aire rosado - 750 ml,9232.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Misiones Rengo Reserva Cabe 750 Ml,5928.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Riccadonna Tinto Espumante 750Ml,7560.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Bread Y Butter Cabernet 750 Ml,11934.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Maipo blanco Chardonnay -1.5 L,6360.0,,0,1500.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Woodbrige white zinafandel - 750 ml,6392.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino San Telmo Cabernet Sauvignon - 750ml,6900.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Robert Mondavi Tinto woodbridge Zinfadel - 750ml,5400.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Tinto Robert Mondav Cabern 750 Ml,11168.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino blanco Protos verdejo criado sobre lias finas - 750 ml,6368.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Bco Sta Julia Dulc Chenin 750mlx6 Vendido por Walmart,8020.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Rose D' Anjou Soupcon De Fruit -750ml Vendido por Walmart,6060.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Riunite blanco melocotón - 750 ml Vendido por Walmart,11150.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Mr Wild Caber Savign 750 Ml Vendido por Walmart,8800.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Casillero del Diablo Reserva Española Sauvignon Blanc - 750 ml Vendido por Walmart,6310.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Viña Maipo Varietal Merlot 1.5L Vendido por Walmart,5460.0,,0,1500.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Trapiche Rose Argentino - 750ml Vendido por Walmart,9300.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Tinto Toro Bravo Tempranillo Merlot -750 ml Vendido por Walmart,8230.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Walmart Costa Rica,Vinos general,Vino Trapiche Malbec Reserve -750 ml Vendido por Walmart,15290.0,,0,750.0,https://www.walmart.co.cr/cervezas-vinos-y-licores/vinos?page=6,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Clos De Pirque Blanco - 1000ml,3100.0,,0,1000.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco Fantini terre siciliante pinot grigio - 750 ml,6110.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Twin View Cabernet 750ml,5000.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Don Simón premium selección chardonnay - 1000 ml,2330.0,,0,1000.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco Frontera chardonnay viñedo protegido por la naturaleza - 750 ml,6070.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,"Vino Ruffino, Blanco Orvieto -750ml",6520.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Maipo blanco Chardonnay -1.5 L,6420.0,,0,1500.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Toro Bravo verdejo sauvignon blanco - 750 ml,4650.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Peter Brum Liebfraulmil Blan - 750ml,5100.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco Pata Negra rueda verdejo - 750 ml,5664.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco Blue Nun Authentic White- 750ml,6830.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Twin View Sau Blanc 750ml,5000.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco St Helena dulce – 750 ml,5220.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco Protos verdejo criado sobre lias finas - 750 ml,6368.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Santa Carolina Chardonay Botella - 750 ml,3500.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco Frontera sauvignon blanc - 1500 ml,9120.0,,0,1500.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco La Linda sweet viognier – 750 ml,8380.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Casillero del Diablo Phenomenal Sauvignon - 750 ml,8660.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino blanco Cavit pinot grigio valdadige - 750 ml,12280.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Tinto Santa Rita 3Medallas Cabernet Sauvignon - 750ml,4734.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Blanco Santa Rita 120 Chardonnay -750ml,8550.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Clos De Pirque Blanco - 1000ml,6110.0,,0,1000.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Fantini Pinot Grigio - 750ml,5000.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Twin View Cabernet 750ml,2330.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Don Simon Premium Chardonnay - 1000ml,6070.0,,0,1000.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Frontera Chardonnay Blanco 750 Ml,8150.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,"Vino Ruffino, Blanco Orvieto -750ml",7530.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Maipo blanco Chardonnay -1.5 L,9300.0,,0,1500.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Blanco Toro Bravo Verde Sauvignon -750 ml,7200.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino blanco,Vino Peter Brum Liebfraulmil Blan - 750ml,7080.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-blanco,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Mr Wild Org Rose 750 ml,11180.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Cune Bailarina 750mlx6,8670.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Soupcon de fruit rose d&apos;anjou 2020 - 750 ml,8020.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino rosado Frontera gently bubbly spritzer roses -750 ml,5770.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino rosado Canti prosecco - 750 ml,10470.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino orgánico Adobe rosé – 375 ml,4900.0,,0,375.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Làudum Vino Laudum Chardonnay 750 ml,9200.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino rosado Cono Sur bicicleta pinot noir - 750 ml,8250.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Im Your Organic rosé - 750 ml,5310.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Adobe rosado botella - 750 ml,10760.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Marques De Caceres Rosado Rioja - 750Ml,8810.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Frontera rosado concha y toro Chile - 750 ml,5770.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Làudum Vino Laudum Monastrell 750 ml,9200.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Laudum Rosado 750 ml,9200.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Làudum Vino Laudun g Reserva 750 ml,12700.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Mediteo Rosado - 750 ml,8000.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Làudum Vino Laudum Reserva 750 ml,11200.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Trivento Reserva Malbec Rosado - 750 ml,8730.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Blanco 14 Hands Chardonnay -750ml,12130.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Ijalba Rioja Eco Tempra -750ml,9790.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Dark Horse Pinot Noir -750ml,11540.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Mr Wild Org Rose 750 Ml,8670.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Cune Bailarina 750mlx6,8020.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rose D' Anjou Soupcon De Fruit -750ml,5770.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Frontera Spritzer Rose -750ml,10470.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Rosado Esp Ita 750ml,4900.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino orgánico Adobe rosé – 375 ml,9200.0,,0,375.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Laudum Chardonnay 750 Ml,8250.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino rosado Cono Sur bicicleta pinot noir - 750 ml,5310.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Vino rosado,Vino Im Your Organic rosé - 750 ml,10760.0,,0,750.0,https://www.masxmenos.cr/cervezas-vinos-y-licores/vinos/vino-rosado,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Merlot -1500 ml,7500.0,,0,1500.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino blanco Frontera chardonnay viñedo protegido por la naturaleza - 750 ml,6070.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Concha y Toro Merlot - 750ml,5930.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino blanco Frontera sauvignon blanc - 1500 ml,9120.0,,0,1500.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera tinto concha y toro cabernet - 1500 ml,9380.0,,0,1500.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino tinto Frontera carmenere viñedo protegido por la naturaleza - 750 ml,5930.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Chardonnay - 1500Ml,8940.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Frontera Cabernet Sauvignon 750Ml,5930.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera blanco sauvignon concha y toro - 750 ml,6070.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera rosado concha y toro Chile - 750 ml,5770.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Midnight Moscato - 750 ml,6550.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino rosado Frontera gently bubbly spritzer roses -750 ml,5770.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino blanco Frontera spritzer chardonnay eldelflower - 750 ml,5910.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Frutal Tropical Mango Maracuyá - 750 ml,4060.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Frutal Tinto De Verano Manzana Naranja - 750 ml,4060.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Frontera Moonlight Moscato 750Ml,6560.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,"Vinos Sub-Categoría Vino Tinto Vino Blanco Vino Rosado Departamento Cervezas, Vinos y Licores Rebaja Exclusiva en línea Rangos de precio",4040.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Merlot -1500 ml,6070.0,,0,1500.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Chardonnay Blanco 750 Ml,5930.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Concha y Toro Merlot - 750ml,9120.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino blanco Frontera sauvignon blanc - 1500 ml,9380.0,,0,1500.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera tinto concha y toro cabernet - 1500 ml,5930.0,,0,1500.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Chardonnay - 1500Ml,5930.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live
+2026-05-27,Masxmenos Costa Rica,Frontera,Vino Frontera Sauvignon Blanco - 750ml,5770.0,,0,750.0,https://www.masxmenos.cr/frontera,web_scraping_live

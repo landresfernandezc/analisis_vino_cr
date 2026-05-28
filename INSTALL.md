@@ -58,6 +58,28 @@ debe terminar con el mensaje `Pipeline finalizado correctamente` y regenerar est
 - `results/eda_resumen_por_retailer_categoria.csv`
 - `results/data_quality_report.csv`
 
+## Instalacion realizada en este equipo
+
+En este PC el entorno virtual quedo instalado fuera de la carpeta del proyecto para evitar
+el limite de rutas largas de Windows:
+
+```powershell
+C:\Users\luisa\.venvs\tfm_vino_cr
+```
+
+Para ejecutar el pipeline desde la carpeta del proyecto:
+
+```bat
+.\run_pipeline.bat
+```
+
+O, si prefieres activar el entorno manualmente:
+
+```powershell
+C:\Users\luisa\.venvs\tfm_vino_cr\Scripts\Activate.ps1
+python -m src.pipeline
+```
+
 ## Variables para BCCR
 
 El pipeline principal no requiere credenciales. Solo el extractor de BCCR necesita estas

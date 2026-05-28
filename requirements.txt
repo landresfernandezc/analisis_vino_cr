@@ -9,3 +9,5 @@ python-dotenv==1.0.1
 jupyter==1.1.1
 streamlit==1.40.1
 reportlab==4.2.5
+chardet==5.2.0
+pytest==9.0.3

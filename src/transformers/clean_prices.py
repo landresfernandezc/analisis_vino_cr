@@ -12,9 +12,10 @@ def normalize_text(value: object) -> str | None:
 
 def clean_price_columns(df: pd.DataFrame) -> pd.DataFrame:
     out = df.copy()
+    out['precio_lista_crc'] = pd.to_numeric(out['precio_lista_crc'], errors='coerce')
+    out['precio_oferta_crc'] = pd.to_numeric(out['precio_oferta_crc'], errors='coerce')
     out['precio_final_crc'] = out['precio_oferta_crc'].fillna(out['precio_lista_crc'])
     out['precio_final_crc'] = pd.to_numeric(out['precio_final_crc'], errors='coerce')
-    out['precio_lista_crc'] = pd.to_numeric(out['precio_lista_crc'], errors='coerce')
     out['presentacion_ml'] = pd.to_numeric(out['presentacion_ml'], errors='coerce')
     out['producto_normalizado'] = out['producto'].apply(normalize_text)
     out['retailer_normalizado'] = out['retailer'].apply(normalize_text)

@@ -1,10 +1,6 @@
 ﻿retailer,categoria,productos,precio_promedio_750ml_crc,precio_min_750ml_crc,precio_max_750ml_crc
-Masxmenos Costa Rica,Vino blanco,8,4454.06,1747.5,6520.0
-Masxmenos Costa Rica,Vino rosado,8,8447.5,5310.0,10760.0
-Masxmenos Costa Rica,Vino tinto,4,7550.0,5930.0,11790.0
-PriceSmart Costa Rica,Vino blanco,2,6345.0,5295.0,7395.0
-PriceSmart Costa Rica,Vino rosado,2,6795.0,5795.0,7795.0
-PriceSmart Costa Rica,Vino tinto,7,10413.57,3397.5,18495.0
-Walmart Costa Rica,Vino blanco,1,8800.0,8800.0,8800.0
-Walmart Costa Rica,Vino rosado,1,5460.0,5460.0,5460.0
-Walmart Costa Rica,Vino tinto,10,4563.5,1965.0,8100.0
+Masxmenos Costa Rica,Frontera,20,5493.0,2965.0,9120.0
+Masxmenos Costa Rica,Vino blanco,30,5718.45,1747.5,12280.0
+Masxmenos Costa Rica,Vino rosado,30,9168.33,4900.0,18400.0
+Walmart Costa Rica,Vino tinto,29,5198.22,1595.0,13170.0
+Walmart Costa Rica,Vinos general,30,7789.87,2730.0,15290.0
