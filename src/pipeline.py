@@ -6,6 +6,7 @@ from pathlib import Path
 import pandas as pd
 
 from src.analysis.eda import quality_report, retailer_category_summary
+from src.analysis.graphs import generate_graphs
 from src.extractors.retail_scraper import RetailSource, RetailWineScraper
 from src.transformers.clean_prices import clean_price_columns
 from src.utils.io import ROOT, load_yaml, save_csv
@@ -75,6 +76,10 @@ def run_outputs(raw: pd.DataFrame) -> None:
     raw_tmp['precio_oferta_crc'] = pd.to_numeric(raw_tmp['precio_oferta_crc'], errors='coerce')
     raw_tmp['precio_final_crc'] = raw_tmp['precio_oferta_crc'].fillna(raw_tmp['precio_lista_crc'])
     save_csv(quality_report(raw_tmp, clean), 'results/data_quality_report.csv')
+
+    # Generate visual outputs only after the cleaned datasets are available.
+    graph_paths = generate_graphs(clean)
+    logger.info('Graficos generados: %s', ', '.join(str(path) for path in graph_paths))
     logger.info('Pipeline finalizado correctamente')
 
 
