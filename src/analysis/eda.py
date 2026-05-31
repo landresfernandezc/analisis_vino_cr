@@ -4,6 +4,7 @@ import pandas as pd
 
 
 def retailer_category_summary(df: pd.DataFrame) -> pd.DataFrame:
+    """Summarize product counts and 750 ml prices by retailer and category."""
     return (
         df.groupby(['retailer', 'categoria'])
         .agg(
@@ -18,6 +19,7 @@ def retailer_category_summary(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def quality_report(raw: pd.DataFrame, clean: pd.DataFrame) -> pd.DataFrame:
+    """Build high-level data quality metrics for raw and cleaned datasets."""
     return pd.DataFrame({
         'metrica': [
             'filas_raw', 'filas_clean', 'faltantes_precio_final_raw',

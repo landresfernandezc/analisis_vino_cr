@@ -11,6 +11,8 @@ from src.extractors.base import BaseExtractor
 
 @dataclass
 class BCCRIndicator:
+    """BCCR economic indicator definition used by the API extractor."""
+
     name: str
     code: int
 
@@ -24,6 +26,7 @@ class BCCRApiExtractor(BaseExtractor):
     URL = 'https://gee.bccr.fi.cr/Indicadores/Suscripciones/WS/wsindicadoreseconomicos.asmx/ObtenerIndicadoresEconomicos'
 
     def __init__(self, indicators: list[BCCRIndicator], start_date='01/01/2025', end_date=None):
+        """Configure the indicator range and read BCCR credentials from env."""
         self.indicators = indicators
         self.start_date = start_date
         self.end_date = end_date or date.today().strftime('%d/%m/%Y')
@@ -31,6 +34,7 @@ class BCCRApiExtractor(BaseExtractor):
         self.token = os.getenv('BCCR_TOKEN')
 
     def extract(self) -> pd.DataFrame:
+        """Download all configured indicators and combine them into one frame."""
         if not self.email or not self.token:
             raise RuntimeError('Configura BCCR_EMAIL y BCCR_TOKEN para ejecutar esta extracción.')
         frames = []
@@ -39,6 +43,7 @@ class BCCRApiExtractor(BaseExtractor):
         return pd.concat(frames, ignore_index=True)
 
     def _fetch_indicator(self, indicator: BCCRIndicator) -> pd.DataFrame:
+        """Request a single BCCR indicator and annotate the returned rows."""
         params = {
             'Indicador': indicator.code,
             'FechaInicio': self.start_date,

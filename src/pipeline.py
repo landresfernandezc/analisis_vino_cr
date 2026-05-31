@@ -15,6 +15,11 @@ logger = get_logger(__name__)
 
 
 def build_retail_sources(config_path: Path) -> list[RetailSource]:
+    """Read the YAML configuration and convert enabled categories into sources.
+
+    Each enabled category becomes one RetailSource, which keeps the scraper
+    independent from the shape of the configuration file.
+    """
     config = load_yaml(config_path)
     sources = []
     for retailer_config in config.get('scraping_sources', []):
@@ -33,6 +38,11 @@ def build_retail_sources(config_path: Path) -> list[RetailSource]:
 
 
 def run_live_scraping(config_path: Path, sleep_seconds: float, verify_ssl: bool) -> pd.DataFrame:
+    """Execute the web scraper and persist the raw extraction result.
+
+    Raises RuntimeError when there are no enabled sources or when the scraper
+    returns an empty dataset, because later cleaning steps require raw rows.
+    """
     sources = build_retail_sources(config_path)
     if not sources:
         raise RuntimeError(f'No hay fuentes de scraping habilitadas en {config_path}')
@@ -47,14 +57,19 @@ def run_live_scraping(config_path: Path, sleep_seconds: float, verify_ssl: bool)
 
 
 def run_outputs(raw: pd.DataFrame) -> None:
+    """Create the cleaned dataset and analysis CSV outputs from raw prices."""
     required_columns = {'precio_lista_crc', 'precio_oferta_crc', 'presentacion_ml', 'producto', 'retailer', 'categoria'}
     missing = required_columns.difference(raw.columns)
     if missing:
         raise RuntimeError(f'El dataset raw no tiene las columnas requeridas: {sorted(missing)}')
 
+    # Normalize and filter the raw extraction before any analytical summaries.
     clean = clean_price_columns(raw)
     save_csv(clean, 'results/webscraping_precios_vino_clean.csv')
     save_csv(retailer_category_summary(clean), 'results/eda_resumen_por_retailer_categoria.csv')
+
+    # Build a temporary raw view with comparable numeric price fields so the
+    # quality report can measure loss between extraction and cleaning.
     raw_tmp = raw.copy()
     raw_tmp['precio_lista_crc'] = pd.to_numeric(raw_tmp['precio_lista_crc'], errors='coerce')
     raw_tmp['precio_oferta_crc'] = pd.to_numeric(raw_tmp['precio_oferta_crc'], errors='coerce')
@@ -64,6 +79,7 @@ def run_outputs(raw: pd.DataFrame) -> None:
 
 
 def parse_args() -> argparse.Namespace:
+    """Parse command-line options for running the pipeline script."""
     parser = argparse.ArgumentParser(description='Pipeline de obtencion y limpieza de precios de vino en Costa Rica.')
     parser.add_argument(
         '--from-existing',
@@ -90,6 +106,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def main():
+    """Coordinate extraction/loading of raw data and generation of outputs."""
     args = parse_args()
     raw_path = ROOT / 'results' / 'webscraping_precios_vino_raw.csv'
     if args.from_existing:
