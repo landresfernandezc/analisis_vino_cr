@@ -27,7 +27,17 @@ scraping_sources:
     enabled: true
     categories:
       - name: Vino tinto
-        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011?page=1
+      - name: Vino tinto
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011?page=2
+      - name: Vino tinto
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011?page=3
+      - name: Vino tinto
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011?page=4
+      - name: Vino tinto
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011?page=5
+      - name: Vino tinto
+        url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-tinto-G10D08014011/G10D08014011?page=6
       - name: Vino blanco
         url: https://www.pricesmart.com/es-cr/categoria/Licor-cerveza-y-vino-G10D08014/Vino-blanco-G10D08014019/G10D08014019
       - name: Vino rosado

@@ -15,6 +15,7 @@ from src.extractors.base import BaseExtractor
 from src.utils.logging_config import get_logger
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 academic-research-tfm-vino-cr/1.0'}
+PLAYWRIGHT_WAIT_MS = 3000
 logger = get_logger(__name__)
 
 
@@ -53,6 +54,9 @@ class RetailWineScraper(BaseExtractor):
 
     def _scrape_source(self, source: RetailSource) -> list[dict]:
         """Download one category page and extract product rows from HTML."""
+        if 'pricesmart.com' in source.url.lower():
+            return self._scrape_pricesmart_source(source)
+
         response = requests.get(source.url, headers=HEADERS, timeout=30, verify=self.verify_ssl)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'lxml')
@@ -61,6 +65,44 @@ class RetailWineScraper(BaseExtractor):
         rows = self._extract_json_ld_rows(soup, source)
         rows.extend(self._extract_text_rows(soup, source))
         return self._deduplicate_rows(rows)
+
+    def _scrape_pricesmart_source(self, source: RetailSource) -> list[dict]:
+        """Render PriceSmart pages because product cards are loaded by JavaScript."""
+        try:
+            from playwright.sync_api import Error as PlaywrightError
+            from playwright.sync_api import sync_playwright
+        except ImportError:
+            logger.warning('Playwright no esta instalado; no se puede renderizar PriceSmart: %s', source.url)
+            return []
+
+        try:
+            with sync_playwright() as playwright:
+                browser = playwright.chromium.launch(headless=True)
+                page = browser.new_page()
+                page.goto(source.url, wait_until='networkidle', timeout=60000)
+                page.wait_for_timeout(PLAYWRIGHT_WAIT_MS)
+                lines = page.locator('body').inner_text().splitlines()
+                browser.close()
+        except PlaywrightError as exc:
+            logger.warning('PriceSmart omitido por error de Playwright: %s | %s', source.url, exc)
+            return []
+
+        rows = []
+        for index, line in enumerate(lines):
+            if 'Vino' not in line:
+                continue
+            possible_price = self._first_price_line(lines[index + 1:index + 5])
+            if not possible_price:
+                continue
+            rows.append(self._build_row(source, line.strip(), possible_price))
+        return self._deduplicate_rows(rows)
+
+    def _first_price_line(self, lines: list[str]) -> str | None:
+        """Return the first nearby Costa Rican currency line in rendered text."""
+        for line in lines:
+            if re.search(r'(?:₡|CRC)\s*[0-9]', line):
+                return line
+        return None
 
     def _extract_json_ld_rows(self, soup: BeautifulSoup, source: RetailSource) -> list[dict]:
         """Extract product names and prices from JSON-LD script tags."""
@@ -176,6 +218,14 @@ class RetailWineScraper(BaseExtractor):
 
     def _parse_presentation_ml(self, product: str) -> float | None:
         """Infer bottle volume in milliliters from the product name."""
+        pack = re.search(r'(\d+)\s*Unidades\s*/\s*(\d+(?:[\.,]\d+)?)\s*(ml|mL|ML|l|L)\b', product, flags=re.I)
+        if pack:
+            units = int(pack.group(1))
+            value = float(pack.group(2).replace(',', '.'))
+            unit = pack.group(3).lower()
+            volume = value * 1000 if unit == 'l' else value
+            return units * volume
+
         match = re.search(r'(\d+(?:[\.,]\d+)?)\s*(ml|mL|ML|l|L|litro|litros)\b', product)
         if not match:
             # Standard wine listings often omit the size; 750 ml is the common
