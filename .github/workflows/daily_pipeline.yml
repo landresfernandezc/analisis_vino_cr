@@ -3,9 +3,8 @@ name: Daily wine dataset pipeline
 on:
   workflow_dispatch:
   schedule:
-    # Runs daily at 06:00 UTC, 00:00 in Costa Rica.
-    - cron: '5 17 * * *'
-      timezone: "America/Costa_Rica"
+    # Runs daily at 17:10 UTC = 11:10 AM Costa Rica time (UTC-6, no DST)
+    - cron: '10 17 * * *'
 
 jobs:
   run-pipeline:
