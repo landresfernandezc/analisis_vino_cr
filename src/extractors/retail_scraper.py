@@ -59,7 +59,7 @@ class RetailWineScraper(BaseExtractor):
 
         response = requests.get(source.url, headers=HEADERS, timeout=30, verify=self.verify_ssl)
         response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'lxml')
+        soup = BeautifulSoup(response.text, 'html.parser')
         # Prefer structured product data when available, then supplement it
         # with visible page text for sites that do not publish JSON-LD.
         rows = self._extract_json_ld_rows(soup, source)
