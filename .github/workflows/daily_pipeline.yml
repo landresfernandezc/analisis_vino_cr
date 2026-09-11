@@ -2,10 +2,6 @@ name: Daily wine dataset pipeline
 
 on:
   workflow_dispatch:
-  schedule:
-    # Runs daily at 06:00 UTC, 00:00 in Costa Rica.
-    - cron: '0 6 * * *'
-
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
