@@ -70,7 +70,8 @@ validar el certificado local de algunos sitios al hacer scraping.
 El pipeline en vivo genera o actualiza:
 
 - `results/webscraping_precios_vino_raw.csv`: datos extraidos por scraping en vivo.
-- `results/webscraping_precios_vino_clean.csv`: datos limpios y normalizados.
+- `results/webscraping_precios_vino_clean.csv`: datos limpios acumulados de todas las ejecuciones.
+- `results/latest_webscraping_precios_vino_clean.csv`: datos limpios de la última ejecución.
 - `results/eda_resumen_por_retailer_categoria.csv`: resumen por retailer y categoria.
 - `results/data_quality_report.csv`: metricas de calidad del dataset.
 
@@ -100,33 +101,32 @@ Cuando se ejecuta con `--upload-s3`, el pipeline guarda particiones diarias:
 
 ```text
 raw/fecha=YYYY-MM-DD/webscraping_precios_vino_raw.csv
-clean/fecha=YYYY-MM-DD/webscraping_precios_vino_clean.csv
+clean/webscraping_precios_vino_clean.csv
 exchange_rate/fecha=YYYY-MM-DD/tipo_cambio_bccr.csv
 ```
 
 Cada corrida fija `fecha_extraccion` con `--run-date`. En GitHub Actions esa fecha
-se calcula diariamente como `YYYY-MM-DD`, por lo que los registros raw y clean de
-cada ejecucion quedan marcados con la fecha del dia y se almacenan como una nueva
-particion historica en S3.
+se calcula diariamente como `YYYY-MM-DD`, por lo que los registros raw quedan
+marcados con la fecha del dia y el archivo clean conserva el acumulado.
 
-Ademas, el pipeline mantiene un CSV limpio acumulado para consumo directo desde
-Streamlit:
+Ademas, el pipeline mantiene un CSV limpio acumulado y otro con la última
+ejecución para consumo directo desde Streamlit:
 
 ```text
 latest/webscraping_precios_vino_clean.csv
 latest/tipo_cambio_bccr.csv
 ```
 
-El primer archivo contiene los registros limpios de todas las corridas ya cargadas.
-El segundo contiene el historico diario del tipo de cambio USD compra/venta del
-BCCR. En cada ejecucion se descarga el CSV acumulado existente, se agregan los
-registros del dia, se eliminan duplicados y se vuelve a subir al mismo key.
+El archivo bajo `clean/` contiene los registros limpios de todas las corridas.
+El archivo bajo `latest/` contiene solamente la última corrida. El segundo
+archivo de la lista contiene el histórico diario del tipo de cambio USD
+compra/venta del BCCR.
 
 Si usas `AWS_S3_PREFIX=tfm-vino-cr`, las rutas quedan bajo ese prefijo:
 
 ```text
 tfm-vino-cr/raw/fecha=YYYY-MM-DD/webscraping_precios_vino_raw.csv
-tfm-vino-cr/clean/fecha=YYYY-MM-DD/webscraping_precios_vino_clean.csv
+tfm-vino-cr/clean/webscraping_precios_vino_clean.csv
 tfm-vino-cr/exchange_rate/fecha=YYYY-MM-DD/tipo_cambio_bccr.csv
 tfm-vino-cr/latest/webscraping_precios_vino_clean.csv
 tfm-vino-cr/latest/tipo_cambio_bccr.csv

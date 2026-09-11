@@ -16,12 +16,11 @@ from src.extractors.bccr_api import (
     GoMetaExchangeRateExtractor,
 )
 from src.extractors.retail_scraper import RetailSource, RetailWineScraper
-from src.transformers.clean_prices import clean_price_columns
+from src.transformers.clean_prices import CLEAN_OUTPUT_COLUMNS, clean_price_columns
 from src.utils.io import ROOT, load_yaml, save_csv
 from src.utils.logging_config import get_logger
 from src.utils.s3_storage import (
     S3Upload,
-    append_clean_dataset_to_s3,
     append_exchange_rate_dataset_to_s3,
     build_dataset_uploads,
     upload_files_to_s3,
@@ -159,6 +158,16 @@ def add_exchange_rate_columns(clean: pd.DataFrame, exchange_path: Path | None) -
     return out
 
 
+def prepare_clean_history(df: pd.DataFrame) -> pd.DataFrame:
+    """Align an existing clean CSV with the current public output schema."""
+    out = df.copy()
+    if 'producto_normalizado' in out.columns:
+        out['producto'] = out['producto_normalizado']
+    if 'retailer_normalizado' in out.columns:
+        out['retailer'] = out['retailer_normalizado']
+    return out.reindex(columns=CLEAN_OUTPUT_COLUMNS)
+
+
 def run_outputs(raw: pd.DataFrame, exchange_path: Path | None = None) -> dict[str, Path]:
     """Create the cleaned dataset and analysis CSV outputs from raw prices."""
     required_columns = {'precio_lista_crc', 'precio_oferta_crc', 'presentacion_ml', 'producto', 'retailer', 'categoria'}
@@ -168,20 +177,29 @@ def run_outputs(raw: pd.DataFrame, exchange_path: Path | None = None) -> dict[st
 
     clean = clean_price_columns(raw)
     clean = add_exchange_rate_columns(clean, exchange_path)
-    clean_path = save_csv(clean, 'results/webscraping_precios_vino_clean.csv')
-    summary_path = save_csv(retailer_category_summary(clean), 'results/eda_resumen_por_retailer_categoria.csv')
+    clean = prepare_clean_history(clean)
+    clean_path = ROOT / 'results' / 'webscraping_precios_vino_clean.csv'
+    if clean_path.exists():
+        previous = prepare_clean_history(pd.read_csv(clean_path))
+        accumulated = pd.concat([previous, clean], ignore_index=True)
+    else:
+        accumulated = clean
+    clean_path = save_csv(accumulated, 'results/webscraping_precios_vino_clean.csv')
+    latest_path = save_csv(clean, 'results/latest_webscraping_precios_vino_clean.csv')
+    summary_path = save_csv(retailer_category_summary(accumulated), 'results/eda_resumen_por_retailer_categoria.csv')
 
     raw_tmp = raw.copy()
     raw_tmp['precio_lista_crc'] = pd.to_numeric(raw_tmp['precio_lista_crc'], errors='coerce')
     raw_tmp['precio_oferta_crc'] = pd.to_numeric(raw_tmp['precio_oferta_crc'], errors='coerce')
     raw_tmp['precio_final_crc'] = raw_tmp['precio_oferta_crc'].fillna(raw_tmp['precio_lista_crc'])
-    quality_path = save_csv(quality_report(raw_tmp, clean), 'results/data_quality_report.csv')
+    quality_path = save_csv(quality_report(raw_tmp, accumulated), 'results/data_quality_report.csv')
 
-    graph_paths = generate_graphs(clean)
+    graph_paths = generate_graphs(accumulated)
     logger.info('Graficos generados: %s', ', '.join(str(path) for path in graph_paths))
     logger.info('Pipeline finalizado correctamente')
     return {
         'clean': clean_path,
+        'latest': latest_path,
         'summary': summary_path,
         'quality': quality_path,
     }
@@ -262,6 +280,7 @@ def main():
         uploads = build_dataset_uploads(
             raw_path=raw_path,
             clean_path=output_paths['clean'],
+            latest_path=output_paths['latest'],
             run_date=args.run_date,
             prefix=args.s3_prefix,
         )
@@ -281,11 +300,6 @@ def main():
                 )
             )
         upload_files_to_s3(args.s3_bucket, uploads)
-        append_clean_dataset_to_s3(
-            bucket=args.s3_bucket,
-            clean_path=output_paths['clean'],
-            prefix=args.s3_prefix,
-        )
         if exchange_path:
             append_exchange_rate_dataset_to_s3(
                 bucket=args.s3_bucket,

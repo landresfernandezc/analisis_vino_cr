@@ -1,9 +1,9 @@
 .venv/
 .matplotlib/
 __pycache__/
+.pytest_cache/
 *.pyc
 .ipynb_checkpoints/
-<<<<<<< HEAD
 .streamlit/secrets.toml
-=======
->>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
+/results/
+/graphs/

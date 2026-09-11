@@ -27,10 +27,11 @@ def _join_s3_key(*parts: str) -> str:
 def build_dataset_uploads(
     raw_path: Path,
     clean_path: Path,
+    latest_path: Path,
     run_date: str,
     prefix: str = '',
 ) -> list[S3Upload]:
-    """Create the historical S3 keys for the daily raw and clean datasets."""
+    """Create S3 uploads for raw history, accumulated clean, and latest clean."""
     return [
         S3Upload(
             local_path=raw_path,
@@ -38,13 +39,17 @@ def build_dataset_uploads(
         ),
         S3Upload(
             local_path=clean_path,
-            key=_join_s3_key(prefix, f'clean/fecha={run_date}', clean_path.name),
+            key=_join_s3_key(prefix, 'clean', clean_path.name),
+        ),
+        S3Upload(
+            local_path=latest_path,
+            key=build_latest_clean_key(prefix),
         ),
     ]
 
 
 def build_latest_clean_key(prefix: str = '') -> str:
-    """Return the S3 key for the accumulated clean dataset consumed by Streamlit."""
+    """Return the S3 key for the latest clean dataset consumed by Streamlit."""
     return _join_s3_key(prefix, 'latest', 'webscraping_precios_vino_clean.csv')
 
 
@@ -123,23 +128,6 @@ def append_csv_dataset_to_s3(
     )
     logger.info('Dataset acumulado actualizado en s3://%s/%s | filas=%s', bucket, key, len(accumulated))
     return key
-
-
-def append_clean_dataset_to_s3(bucket: str, clean_path: Path, prefix: str = '') -> str:
-    """Append today's clean records to the accumulated clean CSV in S3."""
-    return append_csv_dataset_to_s3(
-        bucket=bucket,
-        csv_path=clean_path,
-        key=build_latest_clean_key(prefix),
-        dedupe_columns=[
-            'fecha_extraccion',
-            'retailer_normalizado',
-            'producto_normalizado',
-            'categoria',
-            'url_fuente',
-            'precio_final_crc',
-        ],
-    )
 
 
 def append_exchange_rate_dataset_to_s3(bucket: str, exchange_path: Path, prefix: str = '') -> str:
