@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import argparse
+<<<<<<< HEAD
 import os
 from datetime import date
+=======
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
 from pathlib import Path
 
 import pandas as pd
@@ -13,7 +16,10 @@ from src.extractors.retail_scraper import RetailSource, RetailWineScraper
 from src.transformers.clean_prices import clean_price_columns
 from src.utils.io import ROOT, load_yaml, save_csv
 from src.utils.logging_config import get_logger
+<<<<<<< HEAD
 from src.utils.s3_storage import append_clean_dataset_to_s3, build_dataset_uploads, upload_files_to_s3
+=======
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
 
 logger = get_logger(__name__)
 
@@ -42,7 +48,11 @@ def build_retail_sources(config_path: Path) -> list[RetailSource]:
 
 
 def run_live_scraping(config_path: Path, sleep_seconds: float, verify_ssl: bool) -> pd.DataFrame:
+<<<<<<< HEAD
     """Execute the web scraper and return the raw extraction result.
+=======
+    """Execute the web scraper and persist the raw extraction result.
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
 
     Raises RuntimeError when there are no enabled sources or when the scraper
     returns an empty dataset, because later cleaning steps require raw rows.
@@ -56,6 +66,7 @@ def run_live_scraping(config_path: Path, sleep_seconds: float, verify_ssl: bool)
     if raw.empty:
         raise RuntimeError('El scraping en vivo no devolvio filas. Revisa fuentes, selectores o bloqueo de los sitios.')
 
+<<<<<<< HEAD
     return raw
 
 
@@ -67,6 +78,13 @@ def stamp_extraction_date(raw: pd.DataFrame, run_date: str) -> pd.DataFrame:
 
 
 def run_outputs(raw: pd.DataFrame) -> dict[str, Path]:
+=======
+    save_csv(raw, 'results/webscraping_precios_vino_raw.csv')
+    return raw
+
+
+def run_outputs(raw: pd.DataFrame) -> None:
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
     """Create the cleaned dataset and analysis CSV outputs from raw prices."""
     required_columns = {'precio_lista_crc', 'precio_oferta_crc', 'presentacion_ml', 'producto', 'retailer', 'categoria'}
     missing = required_columns.difference(raw.columns)
@@ -75,8 +93,13 @@ def run_outputs(raw: pd.DataFrame) -> dict[str, Path]:
 
     # Normalize and filter the raw extraction before any analytical summaries.
     clean = clean_price_columns(raw)
+<<<<<<< HEAD
     clean_path = save_csv(clean, 'results/webscraping_precios_vino_clean.csv')
     summary_path = save_csv(retailer_category_summary(clean), 'results/eda_resumen_por_retailer_categoria.csv')
+=======
+    save_csv(clean, 'results/webscraping_precios_vino_clean.csv')
+    save_csv(retailer_category_summary(clean), 'results/eda_resumen_por_retailer_categoria.csv')
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
 
     # Build a temporary raw view with comparable numeric price fields so the
     # quality report can measure loss between extraction and cleaning.
@@ -84,17 +107,24 @@ def run_outputs(raw: pd.DataFrame) -> dict[str, Path]:
     raw_tmp['precio_lista_crc'] = pd.to_numeric(raw_tmp['precio_lista_crc'], errors='coerce')
     raw_tmp['precio_oferta_crc'] = pd.to_numeric(raw_tmp['precio_oferta_crc'], errors='coerce')
     raw_tmp['precio_final_crc'] = raw_tmp['precio_oferta_crc'].fillna(raw_tmp['precio_lista_crc'])
+<<<<<<< HEAD
     quality_path = save_csv(quality_report(raw_tmp, clean), 'results/data_quality_report.csv')
+=======
+    save_csv(quality_report(raw_tmp, clean), 'results/data_quality_report.csv')
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
 
     # Generate visual outputs only after the cleaned datasets are available.
     graph_paths = generate_graphs(clean)
     logger.info('Graficos generados: %s', ', '.join(str(path) for path in graph_paths))
     logger.info('Pipeline finalizado correctamente')
+<<<<<<< HEAD
     return {
         'clean': clean_path,
         'summary': summary_path,
         'quality': quality_path,
     }
+=======
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
 
 
 def parse_args() -> argparse.Namespace:
@@ -121,6 +151,7 @@ def parse_args() -> argparse.Namespace:
         action='store_true',
         help='Desactiva la validacion SSL si el equipo no puede validar certificados de los sitios.',
     )
+<<<<<<< HEAD
     parser.add_argument(
         '--upload-s3',
         action='store_true',
@@ -141,6 +172,8 @@ def parse_args() -> argparse.Namespace:
         default=os.getenv('PIPELINE_RUN_DATE', date.today().isoformat()),
         help='Fecha usada para las particiones S3 fecha=YYYY-MM-DD.',
     )
+=======
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
     return parser.parse_args()
 
 
@@ -153,6 +186,7 @@ def main():
         raw = pd.read_csv(raw_path)
     else:
         raw = run_live_scraping(Path(args.config), args.sleep_seconds, not args.no_verify_ssl)
+<<<<<<< HEAD
 
     raw = stamp_extraction_date(raw, args.run_date)
     raw_path = save_csv(raw, 'results/webscraping_precios_vino_raw.csv')
@@ -171,6 +205,9 @@ def main():
             clean_path=output_paths['clean'],
             prefix=args.s3_prefix,
         )
+=======
+    run_outputs(raw)
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
 
 
 if __name__ == '__main__':

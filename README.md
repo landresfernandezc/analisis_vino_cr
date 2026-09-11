@@ -74,6 +74,7 @@ El pipeline en vivo genera o actualiza:
 - `results/eda_resumen_por_retailer_categoria.csv`: resumen por retailer y categoria.
 - `results/data_quality_report.csv`: metricas de calidad del dataset.
 
+<<<<<<< HEAD
 ## Automatizacion diaria con GitHub Actions y S3
 
 El repositorio incluye `.github/workflows/daily_pipeline.yml`, que ejecuta el
@@ -150,6 +151,8 @@ streamlit run app.py
 En Streamlit Community Cloud, copia `.streamlit/secrets.toml.example` como base
 para definir los secretos de la app.
 
+=======
+>>>>>>> da74379f9f5d9c1d0997917a11cd8ed24caca23a
 Nota actual: Walmart CR y Masxmenos CR devuelven filas con el scraper HTML actual.
 PriceSmart CR devuelve 0 filas, probablemente porque su catalogo depende de JavaScript
 o bloqueo del HTML estatico.
