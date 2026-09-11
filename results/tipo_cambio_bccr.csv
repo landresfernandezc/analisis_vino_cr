@@ -1,0 +1,3 @@
+﻿fecha,fecha_extraccion,indicador,codigo_indicador,valor_crc,fuente,url_fuente
+2026-09-10,2026-09-10,tipo_cambio_compra_usd,317,446.61,bccr_public_json,https://www.bccr.fi.cr/content/bccr/cr/es/home/jcr:content/root/container/container/economicindicators/cardindicador.indicator.317.json
+2026-09-10,2026-09-10,tipo_cambio_venta_usd,318,451.08,bccr_public_json,https://www.bccr.fi.cr/content/bccr/cr/es/home/jcr:content/root/container/container/economicindicators/item_1774647976317.indicator.318.json

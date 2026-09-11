@@ -86,8 +86,12 @@ Configura estos secretos en GitHub:
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_REGION`
 - `AWS_S3_BUCKET`
-- `BCCR_EMAIL`
-- `BCCR_TOKEN`
+
+El tipo de cambio se consulta primero desde el JSON publico que usa la pagina
+oficial del BCCR. Si esa fuente falla, el pipeline intenta usar
+`https://apis.gometa.org/tdc/tdc.json` como respaldo. `BCCR_EMAIL` y
+`BCCR_TOKEN` son opcionales y solo se usan como ultimo respaldo para el web
+service historico del BCCR.
 
 Opcionalmente configura la variable de repositorio `AWS_S3_PREFIX`, por ejemplo
 `tfm-vino-cr`, para guardar los archivos dentro de una carpeta logica del bucket.

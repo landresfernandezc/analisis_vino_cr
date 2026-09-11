@@ -6,6 +6,7 @@ from datetime import date
 
 import pandas as pd
 import requests
+import urllib3
 
 from src.extractors.base import BaseExtractor
 
@@ -59,3 +60,90 @@ class BCCRApiExtractor(BaseExtractor):
         df['indicador'] = indicator.name
         df['codigo_indicador'] = indicator.code
         return df
+
+
+class BCCRPublicExchangeRateExtractor(BaseExtractor):
+    """Extractor for the public BCCR exchange-rate JSON used by bccr.fi.cr."""
+
+    BASE_URL = 'https://www.bccr.fi.cr'
+    RESOURCES = {
+        317: '/content/bccr/cr/es/home/jcr:content/root/container/container/economicindicators/cardindicador',
+        318: '/content/bccr/cr/es/home/jcr:content/root/container/container/economicindicators/item_1774647976317',
+    }
+    NAMES = {
+        317: 'tipo_cambio_compra_usd',
+        318: 'tipo_cambio_venta_usd',
+    }
+
+    def __init__(self, indicators: list[BCCRIndicator], verify_ssl: bool = True):
+        """Configure public exchange-rate indicators from the BCCR website."""
+        self.indicators = indicators
+        self.verify_ssl = verify_ssl
+        if not self.verify_ssl:
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+    def extract(self) -> pd.DataFrame:
+        """Download buy/sell exchange-rate JSON rows from the public BCCR site."""
+        rows = []
+        for indicator in self.indicators:
+            resource = self.RESOURCES.get(indicator.code)
+            if not resource:
+                raise RuntimeError(f'Indicador BCCR publico no configurado: {indicator.code}')
+            rows.extend(self._fetch_indicator(indicator, resource))
+        return pd.DataFrame(rows)
+
+    def _fetch_indicator(self, indicator: BCCRIndicator, resource: str) -> list[dict]:
+        """Request one public BCCR JSON indicator and return normalized rows."""
+        url = f'{self.BASE_URL}{resource}.indicator.{indicator.code}.json'
+        response = requests.get(url, timeout=45, verify=self.verify_ssl)
+        response.raise_for_status()
+        payload = response.json()
+        rows = []
+        for serie in payload.get('series', []):
+            rows.append({
+                'fecha': serie.get('fecha'),
+                'indicador': self.NAMES.get(indicator.code, indicator.name),
+                'codigo_indicador': indicator.code,
+                'valor_crc': serie.get('valorDatoPorPeriodo'),
+                'fuente': 'bccr_public_json',
+                'url_fuente': url,
+            })
+        return rows
+
+
+class GoMetaExchangeRateExtractor(BaseExtractor):
+    """Extractor for GoMeta's public Costa Rica exchange-rate mirror."""
+
+    URL = 'https://apis.gometa.org/tdc/tdc.json'
+
+    def __init__(self, verify_ssl: bool = True):
+        """Configure the GoMeta request."""
+        self.verify_ssl = verify_ssl
+        if not self.verify_ssl:
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+    def extract(self) -> pd.DataFrame:
+        """Download buy/sell exchange rates from GoMeta's public JSON API."""
+        response = requests.get(self.URL, timeout=45, verify=self.verify_ssl)
+        response.raise_for_status()
+        payload = response.json()
+        return pd.DataFrame([
+            {
+                'fecha': payload.get('compra_date'),
+                'indicador': 'tipo_cambio_compra_usd',
+                'codigo_indicador': 317,
+                'valor_crc': payload.get('compra'),
+                'fuente': 'gometa_tdc',
+                'url_fuente': self.URL,
+                'updated': payload.get('updated'),
+            },
+            {
+                'fecha': payload.get('venta_date'),
+                'indicador': 'tipo_cambio_venta_usd',
+                'codigo_indicador': 318,
+                'valor_crc': payload.get('venta'),
+                'fuente': 'gometa_tdc',
+                'url_fuente': self.URL,
+                'updated': payload.get('updated'),
+            },
+        ])

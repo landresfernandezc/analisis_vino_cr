@@ -9,7 +9,12 @@ import pandas as pd
 
 from src.analysis.eda import quality_report, retailer_category_summary
 from src.analysis.graphs import generate_graphs
-from src.extractors.bccr_api import BCCRApiExtractor, BCCRIndicator
+from src.extractors.bccr_api import (
+    BCCRApiExtractor,
+    BCCRIndicator,
+    BCCRPublicExchangeRateExtractor,
+    GoMetaExchangeRateExtractor,
+)
 from src.extractors.retail_scraper import RetailSource, RetailWineScraper
 from src.transformers.clean_prices import clean_price_columns
 from src.utils.io import ROOT, load_yaml, save_csv
@@ -90,31 +95,45 @@ def normalize_bccr_exchange_rate(raw: pd.DataFrame, run_date: str) -> pd.DataFra
     out['fecha'] = pd.to_datetime(out['fecha'], errors='coerce').dt.date.astype(str)
     out['fecha_extraccion'] = pd.to_datetime(run_date).date().isoformat()
     out['valor_crc'] = pd.to_numeric(out['valor_crc'], errors='coerce')
-    columns = ['fecha', 'fecha_extraccion', 'indicador', 'codigo_indicador', 'valor_crc']
+    columns = ['fecha', 'fecha_extraccion', 'indicador', 'codigo_indicador', 'valor_crc', 'fuente', 'url_fuente', 'updated']
     return out[[column for column in columns if column in out.columns]].dropna(subset=['valor_crc'])
 
 
-def run_exchange_rate_output(run_date: str, enabled: bool) -> Path | None:
+def run_exchange_rate_output(run_date: str, enabled: bool, verify_ssl: bool) -> Path | None:
     """Fetch BCCR USD buy/sell exchange rates and save the daily CSV."""
     if not enabled:
         logger.info('Extraccion de tipo de cambio omitida por configuracion')
         return None
-    if not os.getenv('BCCR_EMAIL') or not os.getenv('BCCR_TOKEN'):
-        logger.warning('BCCR_EMAIL y/o BCCR_TOKEN no configurados; se omite tipo de cambio diario')
-        return None
 
-    bccr_date = _run_date_for_bccr(run_date)
-    extractor = BCCRApiExtractor(
-        indicators=[
-            BCCRIndicator(name='tipo_cambio_compra_usd', code=317),
-            BCCRIndicator(name='tipo_cambio_venta_usd', code=318),
-        ],
-        start_date=bccr_date,
-        end_date=bccr_date,
-    )
-    exchange = normalize_bccr_exchange_rate(extractor.extract(), run_date)
+    indicators = [
+        BCCRIndicator(name='tipo_cambio_compra_usd', code=317),
+        BCCRIndicator(name='tipo_cambio_venta_usd', code=318),
+    ]
+    errors = []
+    exchange = pd.DataFrame()
+    extractors = [
+        ('bccr_public_json', BCCRPublicExchangeRateExtractor(indicators=indicators, verify_ssl=verify_ssl)),
+        ('gometa_tdc', GoMetaExchangeRateExtractor(verify_ssl=verify_ssl)),
+    ]
+    if os.getenv('BCCR_EMAIL') and os.getenv('BCCR_TOKEN'):
+        bccr_date = _run_date_for_bccr(run_date)
+        extractors.append((
+            'bccr_legacy_webservice',
+            BCCRApiExtractor(indicators=indicators, start_date=bccr_date, end_date=bccr_date),
+        ))
+
+    for source_name, extractor in extractors:
+        try:
+            exchange = normalize_bccr_exchange_rate(extractor.extract(), run_date)
+            if not exchange.empty:
+                logger.info('Tipo de cambio obtenido desde %s', source_name)
+                break
+        except Exception as exc:
+            errors.append(f'{source_name}: {exc}')
+            logger.warning('No se pudo obtener tipo de cambio desde %s: %s', source_name, exc)
+
     if exchange.empty:
-        logger.warning('La API BCCR no devolvio filas de tipo de cambio para %s', run_date)
+        logger.warning('No se obtuvo tipo de cambio para %s. Errores: %s', run_date, ' | '.join(errors))
         return None
     path = save_csv(exchange, 'results/tipo_cambio_bccr.csv')
     logger.info('Tipo de cambio BCCR guardado: %s', path)
@@ -213,7 +232,11 @@ def main():
     raw = stamp_extraction_date(raw, args.run_date)
     raw_path = save_csv(raw, 'results/webscraping_precios_vino_raw.csv')
     output_paths = run_outputs(raw)
-    exchange_path = run_exchange_rate_output(args.run_date, enabled=not args.skip_exchange_rate)
+    exchange_path = run_exchange_rate_output(
+        args.run_date,
+        enabled=not args.skip_exchange_rate,
+        verify_ssl=not args.no_verify_ssl,
+    )
 
     if args.upload_s3:
         uploads = build_dataset_uploads(
