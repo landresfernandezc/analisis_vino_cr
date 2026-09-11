@@ -140,7 +140,26 @@ def run_exchange_rate_output(run_date: str, enabled: bool, verify_ssl: bool) -> 
     return path
 
 
-def run_outputs(raw: pd.DataFrame) -> dict[str, Path]:
+def add_exchange_rate_columns(clean: pd.DataFrame, exchange_path: Path | None) -> pd.DataFrame:
+    """Add buy/sell exchange rates as columns to every cleaned wine-price row."""
+    out = clean.copy()
+    out['tipo_cambio_compra_usd'] = pd.NA
+    out['tipo_cambio_venta_usd'] = pd.NA
+    if not exchange_path or not exchange_path.exists():
+        return out
+
+    exchange = pd.read_csv(exchange_path)
+    for indicator, column in {
+        'tipo_cambio_compra_usd': 'tipo_cambio_compra_usd',
+        'tipo_cambio_venta_usd': 'tipo_cambio_venta_usd',
+    }.items():
+        values = exchange.loc[exchange['indicador'] == indicator, 'valor_crc']
+        if not values.empty:
+            out[column] = float(values.iloc[-1])
+    return out
+
+
+def run_outputs(raw: pd.DataFrame, exchange_path: Path | None = None) -> dict[str, Path]:
     """Create the cleaned dataset and analysis CSV outputs from raw prices."""
     required_columns = {'precio_lista_crc', 'precio_oferta_crc', 'presentacion_ml', 'producto', 'retailer', 'categoria'}
     missing = required_columns.difference(raw.columns)
@@ -148,6 +167,7 @@ def run_outputs(raw: pd.DataFrame) -> dict[str, Path]:
         raise RuntimeError(f'El dataset raw no tiene las columnas requeridas: {sorted(missing)}')
 
     clean = clean_price_columns(raw)
+    clean = add_exchange_rate_columns(clean, exchange_path)
     clean_path = save_csv(clean, 'results/webscraping_precios_vino_clean.csv')
     summary_path = save_csv(retailer_category_summary(clean), 'results/eda_resumen_por_retailer_categoria.csv')
 
@@ -231,12 +251,12 @@ def main():
 
     raw = stamp_extraction_date(raw, args.run_date)
     raw_path = save_csv(raw, 'results/webscraping_precios_vino_raw.csv')
-    output_paths = run_outputs(raw)
     exchange_path = run_exchange_rate_output(
         args.run_date,
         enabled=not args.skip_exchange_rate,
         verify_ssl=not args.no_verify_ssl,
     )
+    output_paths = run_outputs(raw, exchange_path=exchange_path)
 
     if args.upload_s3:
         uploads = build_dataset_uploads(
