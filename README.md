@@ -86,6 +86,8 @@ Configura estos secretos en GitHub:
 - `AWS_SECRET_ACCESS_KEY`
 - `AWS_REGION`
 - `AWS_S3_BUCKET`
+- `BCCR_EMAIL`
+- `BCCR_TOKEN`
 
 Opcionalmente configura la variable de repositorio `AWS_S3_PREFIX`, por ejemplo
 `tfm-vino-cr`, para guardar los archivos dentro de una carpeta logica del bucket.
@@ -95,6 +97,7 @@ Cuando se ejecuta con `--upload-s3`, el pipeline guarda particiones diarias:
 ```text
 raw/fecha=YYYY-MM-DD/webscraping_precios_vino_raw.csv
 clean/fecha=YYYY-MM-DD/webscraping_precios_vino_clean.csv
+exchange_rate/fecha=YYYY-MM-DD/tipo_cambio_bccr.csv
 ```
 
 Cada corrida fija `fecha_extraccion` con `--run-date`. En GitHub Actions esa fecha
@@ -107,18 +110,22 @@ Streamlit:
 
 ```text
 latest/webscraping_precios_vino_clean.csv
+latest/tipo_cambio_bccr.csv
 ```
 
-Ese archivo contiene los registros limpios de todas las corridas ya cargadas. En
-cada ejecucion se descarga el CSV acumulado existente, se agregan los registros
-limpios del dia, se eliminan duplicados y se vuelve a subir al mismo key.
+El primer archivo contiene los registros limpios de todas las corridas ya cargadas.
+El segundo contiene el historico diario del tipo de cambio USD compra/venta del
+BCCR. En cada ejecucion se descarga el CSV acumulado existente, se agregan los
+registros del dia, se eliminan duplicados y se vuelve a subir al mismo key.
 
 Si usas `AWS_S3_PREFIX=tfm-vino-cr`, las rutas quedan bajo ese prefijo:
 
 ```text
 tfm-vino-cr/raw/fecha=YYYY-MM-DD/webscraping_precios_vino_raw.csv
 tfm-vino-cr/clean/fecha=YYYY-MM-DD/webscraping_precios_vino_clean.csv
+tfm-vino-cr/exchange_rate/fecha=YYYY-MM-DD/tipo_cambio_bccr.csv
 tfm-vino-cr/latest/webscraping_precios_vino_clean.csv
+tfm-vino-cr/latest/tipo_cambio_bccr.csv
 ```
 
 Para probar localmente la subida a S3:
@@ -139,7 +146,9 @@ python -m src.pipeline --from-existing --upload-s3
 
 La app `app.py` lee el CSV limpio acumulado
 `latest/webscraping_precios_vino_clean.csv` desde S3 cuando `AWS_S3_BUCKET` esta
-configurado. Si no hay bucket configurado, usa el CSV local en `results/`.
+configurado. Tambien intenta leer `latest/tipo_cambio_bccr.csv` para mostrar el
+ultimo tipo de cambio de venta USD. Si no hay bucket configurado, usa los CSV
+locales en `results/`.
 
 Para ejecutarla localmente:
 

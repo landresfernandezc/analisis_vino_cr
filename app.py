@@ -48,16 +48,44 @@ def load_latest_dataset() -> pd.DataFrame:
     return pd.read_csv(local_path)
 
 
+@st.cache_data(ttl=900)
+def load_exchange_rate_dataset() -> pd.DataFrame | None:
+    """Load accumulated exchange-rate data when it exists."""
+    bucket = get_setting('AWS_S3_BUCKET')
+    prefix = get_setting('AWS_S3_PREFIX')
+    key = '/'.join(part.strip('/') for part in [prefix, 'latest/tipo_cambio_bccr.csv'] if part.strip('/'))
+
+    try:
+        if bucket:
+            client = build_s3_client()
+            response = client.get_object(Bucket=bucket, Key=key)
+            return pd.read_csv(BytesIO(response['Body'].read()))
+
+        local_path = ROOT / 'results' / 'tipo_cambio_bccr.csv'
+        if local_path.exists():
+            return pd.read_csv(local_path)
+    except Exception:
+        return None
+    return None
+
+
 st.set_page_config(page_title='Vinos CR', layout='wide')
 st.title('Vinos CR')
 
 df = load_latest_dataset()
+exchange_df = load_exchange_rate_dataset()
 
 latest_date = df['fecha_extraccion'].max() if 'fecha_extraccion' in df else 'sin fecha'
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 col1.metric('Fecha latest', latest_date)
 col2.metric('Productos', len(df))
 col3.metric('Retailers', df['retailer'].nunique() if 'retailer' in df else 0)
+if exchange_df is not None and {'indicador', 'valor_crc'}.issubset(exchange_df.columns):
+    latest_exchange = exchange_df.sort_values('fecha_extraccion').groupby('indicador').tail(1)
+    venta = latest_exchange.loc[latest_exchange['indicador'].str.contains('venta', case=False, na=False), 'valor_crc']
+    col4.metric('USD venta CRC', round(float(venta.iloc[-1]), 2) if not venta.empty else 'n/d')
+else:
+    col4.metric('USD venta CRC', 'n/d')
 
 st.dataframe(df, use_container_width=True)
 
@@ -69,3 +97,6 @@ if {'retailer', 'precio_equivalente_750ml_crc'}.issubset(df.columns):
         .reset_index()
     )
     st.bar_chart(chart_data, x='retailer', y='precio_equivalente_750ml_crc')
+
+if exchange_df is not None:
+    st.dataframe(exchange_df, use_container_width=True)

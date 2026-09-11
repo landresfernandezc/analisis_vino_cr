@@ -9,11 +9,18 @@ import pandas as pd
 
 from src.analysis.eda import quality_report, retailer_category_summary
 from src.analysis.graphs import generate_graphs
+from src.extractors.bccr_api import BCCRApiExtractor, BCCRIndicator
 from src.extractors.retail_scraper import RetailSource, RetailWineScraper
 from src.transformers.clean_prices import clean_price_columns
 from src.utils.io import ROOT, load_yaml, save_csv
 from src.utils.logging_config import get_logger
-from src.utils.s3_storage import append_clean_dataset_to_s3, build_dataset_uploads, upload_files_to_s3
+from src.utils.s3_storage import (
+    S3Upload,
+    append_clean_dataset_to_s3,
+    append_exchange_rate_dataset_to_s3,
+    build_dataset_uploads,
+    upload_files_to_s3,
+)
 
 logger = get_logger(__name__)
 
@@ -55,6 +62,63 @@ def stamp_extraction_date(raw: pd.DataFrame, run_date: str) -> pd.DataFrame:
     stamped = raw.copy()
     stamped['fecha_extraccion'] = pd.to_datetime(run_date).date().isoformat()
     return stamped
+
+
+def _run_date_for_bccr(run_date: str) -> str:
+    """Convert the ISO pipeline date to the BCCR dd/mm/YYYY format."""
+    return pd.to_datetime(run_date).strftime('%d/%m/%Y')
+
+
+def normalize_bccr_exchange_rate(raw: pd.DataFrame, run_date: str) -> pd.DataFrame:
+    """Normalize BCCR exchange-rate rows into a compact daily dataset."""
+    out = raw.copy()
+    column_map = {
+        'DES_FECHA': 'fecha',
+        'Fecha': 'fecha',
+        'NUM_VALOR': 'valor_crc',
+        'Valor': 'valor_crc',
+    }
+    out = out.rename(columns={column: column_map[column] for column in column_map if column in out.columns})
+    if 'fecha' not in out.columns:
+        out['fecha'] = run_date
+    if 'valor_crc' not in out.columns:
+        numeric_columns = out.select_dtypes(include='number').columns.difference(['codigo_indicador'])
+        if numeric_columns.empty:
+            raise RuntimeError('La respuesta BCCR no contiene una columna numerica de valor.')
+        out['valor_crc'] = out[numeric_columns[0]]
+
+    out['fecha'] = pd.to_datetime(out['fecha'], errors='coerce').dt.date.astype(str)
+    out['fecha_extraccion'] = pd.to_datetime(run_date).date().isoformat()
+    out['valor_crc'] = pd.to_numeric(out['valor_crc'], errors='coerce')
+    columns = ['fecha', 'fecha_extraccion', 'indicador', 'codigo_indicador', 'valor_crc']
+    return out[[column for column in columns if column in out.columns]].dropna(subset=['valor_crc'])
+
+
+def run_exchange_rate_output(run_date: str, enabled: bool) -> Path | None:
+    """Fetch BCCR USD buy/sell exchange rates and save the daily CSV."""
+    if not enabled:
+        logger.info('Extraccion de tipo de cambio omitida por configuracion')
+        return None
+    if not os.getenv('BCCR_EMAIL') or not os.getenv('BCCR_TOKEN'):
+        logger.warning('BCCR_EMAIL y/o BCCR_TOKEN no configurados; se omite tipo de cambio diario')
+        return None
+
+    bccr_date = _run_date_for_bccr(run_date)
+    extractor = BCCRApiExtractor(
+        indicators=[
+            BCCRIndicator(name='tipo_cambio_compra_usd', code=317),
+            BCCRIndicator(name='tipo_cambio_venta_usd', code=318),
+        ],
+        start_date=bccr_date,
+        end_date=bccr_date,
+    )
+    exchange = normalize_bccr_exchange_rate(extractor.extract(), run_date)
+    if exchange.empty:
+        logger.warning('La API BCCR no devolvio filas de tipo de cambio para %s', run_date)
+        return None
+    path = save_csv(exchange, 'results/tipo_cambio_bccr.csv')
+    logger.info('Tipo de cambio BCCR guardado: %s', path)
+    return path
 
 
 def run_outputs(raw: pd.DataFrame) -> dict[str, Path]:
@@ -128,6 +192,11 @@ def parse_args() -> argparse.Namespace:
         default=os.getenv('PIPELINE_RUN_DATE', date.today().isoformat()),
         help='Fecha usada para los registros diarios y las particiones S3 fecha=YYYY-MM-DD.',
     )
+    parser.add_argument(
+        '--skip-exchange-rate',
+        action='store_true',
+        help='Omite la consulta diaria del tipo de cambio BCCR.',
+    )
     return parser.parse_args()
 
 
@@ -144,6 +213,7 @@ def main():
     raw = stamp_extraction_date(raw, args.run_date)
     raw_path = save_csv(raw, 'results/webscraping_precios_vino_raw.csv')
     output_paths = run_outputs(raw)
+    exchange_path = run_exchange_rate_output(args.run_date, enabled=not args.skip_exchange_rate)
 
     if args.upload_s3:
         uploads = build_dataset_uploads(
@@ -152,12 +222,33 @@ def main():
             run_date=args.run_date,
             prefix=args.s3_prefix,
         )
+        if exchange_path:
+            uploads.append(
+                S3Upload(
+                    local_path=exchange_path,
+                    key='/'.join(
+                        part.strip('/')
+                        for part in [
+                            args.s3_prefix,
+                            f'exchange_rate/fecha={args.run_date}',
+                            exchange_path.name,
+                        ]
+                        if part.strip('/')
+                    ),
+                )
+            )
         upload_files_to_s3(args.s3_bucket, uploads)
         append_clean_dataset_to_s3(
             bucket=args.s3_bucket,
             clean_path=output_paths['clean'],
             prefix=args.s3_prefix,
         )
+        if exchange_path:
+            append_exchange_rate_dataset_to_s3(
+                bucket=args.s3_bucket,
+                exchange_path=exchange_path,
+                prefix=args.s3_prefix,
+            )
 
 
 if __name__ == '__main__':

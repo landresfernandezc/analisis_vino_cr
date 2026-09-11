@@ -3,8 +3,8 @@ name: Daily wine dataset pipeline
 on:
   workflow_dispatch:
   schedule:
-    # Runs daily at 12:00 UTC, 06:00 in Costa Rica.
-    - cron: '0 12 * * *'
+    # Runs daily at 06:00 UTC, 00:00 in Costa Rica.
+    - cron: '0 6 * * *'
 
 jobs:
   run-pipeline:
@@ -18,6 +18,8 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
       AWS_S3_PREFIX: ${{ vars.AWS_S3_PREFIX }}
+      BCCR_EMAIL: ${{ secrets.BCCR_EMAIL }}
+      BCCR_TOKEN: ${{ secrets.BCCR_TOKEN }}
 
     steps:
       - name: Checkout repository
