@@ -1,0 +1,40 @@
+name: Daily wine dataset pipeline
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Runs daily at 12:00 UTC, 06:00 in Costa Rica.
+    - cron: '0 12 * * *'
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    env:
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      AWS_S3_PREFIX: ${{ vars.AWS_S3_PREFIX }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m playwright install chromium
+
+      - name: Run pipeline and upload datasets to S3
+        run: |
+          python -m src.pipeline --sleep-seconds 1 --no-verify-ssl --upload-s3 --run-date "$(date -u +%F)"

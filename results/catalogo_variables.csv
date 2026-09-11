@@ -1,0 +1,15 @@
+variable,tipo,origen,descripcion,uso_analitico
+producto,categorica,web scraping,Nombre comercial del vino,Identificación de oferta y marcas
+retailer,categorica,web scraping,Comercio donde se observa el producto,Comparación competitiva
+categoria,categorica,web scraping,Tipo de vino observado,Segmentación tinto/blanco/rosado/espumoso
+precio_final_crc,numerica,web scraping,Precio efectivo observado en colones,Análisis de precio de mercado
+precio_equivalente_750ml_crc,numerica,transformación,Precio normalizado a botella de 750 ml,Comparación justa entre presentaciones
+presentacion_ml,numerica,web scraping/regex,Tamaño del producto en mililitros,Normalización de precios
+descuento_pct,numerica,web scraping,Porcentaje de descuento visible,Análisis promocional
+tipo_cambio_usd_crc,numerica,BCCR,Tipo de cambio compra/venta USD,Impacto en productos importados
+ipc,numerica,BCCR,Índice de precios al consumidor,Control de inflación
+valor_importado_usd,numerica,PROCOMER/COMEX,Valor de importaciones de vino,Estimación de tamaño del mercado importado
+volumen_importado_litros,numerica,PROCOMER/COMEX,Volumen importado,Demanda aparente
+pais_origen,categorica,PROCOMER/COMEX,País de origen de importación,Mapeo de proveedores internacionales
+ingreso_hogar,numerica,INEC,Ingreso o proxy socioeconómico,Segmentación de consumidores
+llegadas_turistas,numerica,ICT,Cantidad de turistas internacionales,Demanda potencial HORECA/turística
