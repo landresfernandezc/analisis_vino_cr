@@ -2,8 +2,12 @@
 .matplotlib/
 __pycache__/
 .pytest_cache/
+.pytest-tmp/
+.pytest-cache-local/
+.test-output/
 *.pyc
 .ipynb_checkpoints/
 .streamlit/secrets.toml
 /results/
 /graphs/
+/data/manual_clean_imports/*.csv

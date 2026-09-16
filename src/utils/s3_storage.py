@@ -53,9 +53,37 @@ def build_latest_clean_key(prefix: str = '') -> str:
     return _join_s3_key(prefix, 'latest', 'webscraping_precios_vino_clean.csv')
 
 
+def build_clean_history_key(prefix: str = '') -> str:
+    """Return the S3 key for the accumulated clean dataset."""
+    return _join_s3_key(prefix, 'clean', 'webscraping_precios_vino_clean.csv')
+
+
 def build_latest_exchange_rate_key(prefix: str = '') -> str:
     """Return the S3 key for the accumulated exchange-rate dataset."""
     return _join_s3_key(prefix, 'latest', 'tipo_cambio_bccr.csv')
+
+
+def read_csv_from_s3(bucket: str, key: str) -> pd.DataFrame | None:
+    """Read a CSV from S3, returning None when the object does not exist."""
+    try:
+        import boto3
+        from botocore.exceptions import ClientError
+    except ImportError as exc:
+        raise RuntimeError('boto3 no esta instalado. Ejecuta pip install -r requirements.txt') from exc
+
+    if not bucket:
+        raise RuntimeError('Debes configurar AWS_S3_BUCKET o pasar --s3-bucket.')
+
+    client = boto3.client('s3')
+    try:
+        response = client.get_object(Bucket=bucket, Key=key)
+    except ClientError as exc:
+        error_code = exc.response.get('Error', {}).get('Code')
+        if error_code in {'NoSuchKey', '404'}:
+            logger.info('No existe historico en s3://%s/%s', bucket, key)
+            return None
+        raise
+    return pd.read_csv(BytesIO(response['Body'].read()))
 
 
 def upload_files_to_s3(bucket: str, uploads: list[S3Upload]) -> list[str]:

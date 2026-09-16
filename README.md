@@ -71,7 +71,7 @@ El pipeline en vivo genera o actualiza:
 
 - `results/webscraping_precios_vino_raw.csv`: datos extraidos por scraping en vivo.
 - `results/webscraping_precios_vino_clean.csv`: datos limpios acumulados de todas las ejecuciones.
-- `results/latest_webscraping_precios_vino_clean.csv`: datos limpios de la última ejecución.
+- `results/latest_webscraping_precios_vino_clean.csv`: copia del histórico limpio acumulado, publicada bajo el nombre usado por la app.
 - `results/eda_resumen_por_retailer_categoria.csv`: resumen por retailer y categoria.
 - `results/data_quality_report.csv`: metricas de calidad del dataset.
 
@@ -109,18 +109,17 @@ Cada corrida fija `fecha_extraccion` con `--run-date`. En GitHub Actions esa fec
 se calcula diariamente como `YYYY-MM-DD`, por lo que los registros raw quedan
 marcados con la fecha del dia y el archivo clean conserva el acumulado.
 
-Ademas, el pipeline mantiene un CSV limpio acumulado y otro con la última
-ejecución para consumo directo desde Streamlit:
+Ademas, el pipeline publica el CSV limpio acumulado para consumo directo desde
+Streamlit:
 
 ```text
 latest/webscraping_precios_vino_clean.csv
 latest/tipo_cambio_bccr.csv
 ```
 
-El archivo bajo `clean/` contiene los registros limpios de todas las corridas.
-El archivo bajo `latest/` contiene solamente la última corrida. El segundo
-archivo de la lista contiene el histórico diario del tipo de cambio USD
-compra/venta del BCCR.
+Los archivos bajo `clean/` y `latest/` contienen los registros limpios de todas
+las corridas. El segundo archivo de la lista contiene el histórico diario del
+tipo de cambio USD compra/venta del BCCR.
 
 Si usas `AWS_S3_PREFIX=tfm-vino-cr`, las rutas quedan bajo ese prefijo:
 
@@ -149,7 +148,7 @@ python -m src.pipeline --from-existing --upload-s3
 ## Streamlit
 
 La app `app.py` lee el CSV limpio acumulado
-`latest/webscraping_precios_vino_clean.csv` desde S3 cuando `AWS_S3_BUCKET` esta
+`clean/webscraping_precios_vino_clean.csv` desde S3 cuando `AWS_S3_BUCKET` esta
 configurado. Tambien intenta leer `latest/tipo_cambio_bccr.csv` para mostrar el
 ultimo tipo de cambio de venta USD. Si no hay bucket configurado, usa los CSV
 locales en `results/`.

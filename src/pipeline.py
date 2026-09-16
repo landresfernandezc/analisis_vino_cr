@@ -16,17 +16,23 @@ from src.extractors.bccr_api import (
     GoMetaExchangeRateExtractor,
 )
 from src.extractors.retail_scraper import RetailSource, RetailWineScraper
-from src.transformers.clean_prices import CLEAN_OUTPUT_COLUMNS, clean_price_columns
+from src.transformers.clean_prices import CLEAN_OUTPUT_COLUMNS, clean_price_columns, normalize_text
 from src.utils.io import ROOT, load_yaml, save_csv
 from src.utils.logging_config import get_logger
 from src.utils.s3_storage import (
     S3Upload,
+    append_csv_dataset_to_s3,
     append_exchange_rate_dataset_to_s3,
+    build_clean_history_key,
     build_dataset_uploads,
+    build_latest_clean_key,
+    read_csv_from_s3,
     upload_files_to_s3,
 )
 
 logger = get_logger(__name__)
+CLEAN_DEDUPE_COLUMNS = ['fecha_extraccion', 'retailer', 'categoria', 'producto']
+DEFAULT_CLEAN_IMPORT_DIR = ROOT / 'data' / 'manual_clean_imports'
 
 
 def build_retail_sources(config_path: Path) -> list[RetailSource]:
@@ -165,7 +171,46 @@ def prepare_clean_history(df: pd.DataFrame) -> pd.DataFrame:
         out['producto'] = out['producto_normalizado']
     if 'retailer_normalizado' in out.columns:
         out['retailer'] = out['retailer_normalizado']
+    if 'producto' in out.columns:
+        out['producto'] = out['producto'].apply(normalize_text)
+    if 'retailer' in out.columns:
+        out['retailer'] = out['retailer'].apply(normalize_text)
+    for column in ['precio_lista_crc', 'precio_oferta_crc', 'precio_final_crc', 'presentacion_ml']:
+        if column in out.columns:
+            out[column] = pd.to_numeric(out[column], errors='coerce')
+    if {'precio_lista_crc', 'precio_oferta_crc'}.issubset(out.columns):
+        out['precio_final_crc'] = out.get('precio_final_crc', pd.Series(index=out.index, dtype='float64'))
+        out['precio_final_crc'] = out['precio_final_crc'].fillna(out['precio_oferta_crc']).fillna(out['precio_lista_crc'])
+    if {'precio_final_crc', 'presentacion_ml'}.issubset(out.columns):
+        equivalent = (out['precio_final_crc'] / out['presentacion_ml'] * 750).round(2)
+        out['precio_equivalente_750ml_crc'] = out.get(
+            'precio_equivalente_750ml_crc',
+            pd.Series(index=out.index, dtype='float64'),
+        )
+        out['precio_equivalente_750ml_crc'] = out['precio_equivalente_750ml_crc'].fillna(equivalent)
     return out.reindex(columns=CLEAN_OUTPUT_COLUMNS)
+
+
+def dedupe_clean_history(df: pd.DataFrame) -> pd.DataFrame:
+    """Remove duplicate product snapshots from the accumulated clean dataset."""
+    out = df.copy()
+    normalized_key_columns = []
+    for column in CLEAN_DEDUPE_COLUMNS:
+        if column not in out.columns:
+            continue
+        key_column = f'__dedupe_{column}'
+        normalized_key_columns.append(key_column)
+        if column in {'retailer', 'categoria', 'producto'}:
+            out[key_column] = out[column].apply(normalize_text)
+        else:
+            out[key_column] = out[column]
+    dedupe_columns = normalized_key_columns
+    if not dedupe_columns:
+        return out
+    out['__dedupe_completeness'] = out[CLEAN_OUTPUT_COLUMNS].notna().sum(axis=1)
+    out = out.sort_values('__dedupe_completeness')
+    out = out.drop_duplicates(subset=dedupe_columns, keep='last')
+    return out.drop(columns=normalized_key_columns + ['__dedupe_completeness'])
 
 
 def run_outputs(raw: pd.DataFrame, exchange_path: Path | None = None) -> dict[str, Path]:
@@ -184,8 +229,9 @@ def run_outputs(raw: pd.DataFrame, exchange_path: Path | None = None) -> dict[st
         accumulated = pd.concat([previous, clean], ignore_index=True)
     else:
         accumulated = clean
+    accumulated = dedupe_clean_history(accumulated)
     clean_path = save_csv(accumulated, 'results/webscraping_precios_vino_clean.csv')
-    latest_path = save_csv(clean, 'results/latest_webscraping_precios_vino_clean.csv')
+    latest_path = save_csv(accumulated, 'results/latest_webscraping_precios_vino_clean.csv')
     summary_path = save_csv(retailer_category_summary(accumulated), 'results/eda_resumen_por_retailer_categoria.csv')
 
     raw_tmp = raw.copy()
@@ -203,6 +249,82 @@ def run_outputs(raw: pd.DataFrame, exchange_path: Path | None = None) -> dict[st
         'summary': summary_path,
         'quality': quality_path,
     }
+
+
+def hydrate_clean_history_from_s3(bucket: str, prefix: str = '') -> Path | None:
+    """Download the accumulated clean history so stateless daily runs can append to it."""
+    if not bucket:
+        return None
+
+    for key in [build_clean_history_key(prefix), build_latest_clean_key(prefix)]:
+        history = read_csv_from_s3(bucket, key)
+        if history is None or history.empty:
+            continue
+        history = prepare_clean_history(history)
+        local_path = ROOT / 'results' / 'webscraping_precios_vino_clean.csv'
+        if local_path.exists():
+            local_history = prepare_clean_history(pd.read_csv(local_path))
+            history = pd.concat([history, local_history], ignore_index=True)
+        history = dedupe_clean_history(history)
+        path = save_csv(history, 'results/webscraping_precios_vino_clean.csv')
+        logger.info('Historico limpio descargado desde s3://%s/%s | filas=%s', bucket, key, len(history))
+        return path
+    return None
+
+
+def sync_local_clean_history_to_s3(bucket: str, prefix: str = '') -> list[str]:
+    """Overwrite S3 clean/latest datasets with the local accumulated clean CSV."""
+    clean_path = ROOT / 'results' / 'webscraping_precios_vino_clean.csv'
+    if not clean_path.exists():
+        raise FileNotFoundError(f'No existe el historico limpio local: {clean_path}')
+
+    clean = dedupe_clean_history(prepare_clean_history(pd.read_csv(clean_path)))
+    clean_path = save_csv(clean, 'results/webscraping_precios_vino_clean.csv')
+    latest_path = save_csv(clean, 'results/latest_webscraping_precios_vino_clean.csv')
+    uploads = [
+        S3Upload(local_path=clean_path, key=build_clean_history_key(prefix)),
+        S3Upload(local_path=latest_path, key=build_latest_clean_key(prefix)),
+    ]
+    keys = upload_files_to_s3(bucket, uploads)
+    logger.info('Historico limpio local sincronizado a S3 | filas=%s', len(clean))
+    return keys
+
+
+def dedupe_local_clean_history() -> dict[str, Path]:
+    """Deduplicate and rewrite the local clean/latest accumulated datasets."""
+    clean_path = ROOT / 'results' / 'webscraping_precios_vino_clean.csv'
+    if not clean_path.exists():
+        raise FileNotFoundError(f'No existe el historico limpio local: {clean_path}')
+
+    clean = dedupe_clean_history(prepare_clean_history(pd.read_csv(clean_path)))
+    clean_path = save_csv(clean, 'results/webscraping_precios_vino_clean.csv')
+    latest_path = save_csv(clean, 'results/latest_webscraping_precios_vino_clean.csv')
+    logger.info('Historico limpio local deduplicado | filas=%s', len(clean))
+    return {'clean': clean_path, 'latest': latest_path}
+
+
+def merge_clean_csv_folder(import_dir: Path = DEFAULT_CLEAN_IMPORT_DIR) -> dict[str, Path]:
+    """Merge all CSV files in a folder into the local accumulated clean dataset."""
+    clean_path = ROOT / 'results' / 'webscraping_precios_vino_clean.csv'
+    csv_paths = sorted(path for path in import_dir.glob('*.csv') if path.is_file())
+    if not csv_paths:
+        raise FileNotFoundError(f'No encontre CSV para unir en: {import_dir}')
+
+    frames = []
+    if clean_path.exists():
+        frames.append(prepare_clean_history(pd.read_csv(clean_path)))
+    frames.extend(prepare_clean_history(pd.read_csv(path)) for path in csv_paths)
+
+    merged = dedupe_clean_history(pd.concat(frames, ignore_index=True))
+    clean_path = save_csv(merged, 'results/webscraping_precios_vino_clean.csv')
+    latest_path = save_csv(merged, 'results/latest_webscraping_precios_vino_clean.csv')
+    logger.info(
+        'CSV locales unidos desde %s | archivos=%s | filas=%s',
+        import_dir,
+        len(csv_paths),
+        len(merged),
+    )
+    return {'clean': clean_path, 'latest': latest_path}
 
 
 def parse_args() -> argparse.Namespace:
@@ -235,6 +357,21 @@ def parse_args() -> argparse.Namespace:
         help='Sube el raw historico y clean historico a AWS S3, y actualiza el clean acumulado latest.',
     )
     parser.add_argument(
+        '--sync-local-clean-s3',
+        action='store_true',
+        help='Sube el clean local acumulado a S3 clean/ y latest/ sin ejecutar scraping.',
+    )
+    parser.add_argument(
+        '--merge-clean-folder',
+        default='',
+        help='Une todos los CSV de una carpeta al clean local acumulado sin ejecutar scraping.',
+    )
+    parser.add_argument(
+        '--dedupe-local-clean',
+        action='store_true',
+        help='Deduplica el clean local acumulado y regenera latest sin ejecutar scraping.',
+    )
+    parser.add_argument(
         '--s3-bucket',
         default=os.getenv('AWS_S3_BUCKET', ''),
         help='Bucket S3 destino. Tambien puede configurarse con AWS_S3_BUCKET.',
@@ -260,6 +397,18 @@ def parse_args() -> argparse.Namespace:
 def main():
     """Coordinate extraction/loading of raw data and generation of outputs."""
     args = parse_args()
+    if args.dedupe_local_clean:
+        dedupe_local_clean_history()
+        return
+
+    if args.merge_clean_folder:
+        merge_clean_csv_folder(Path(args.merge_clean_folder))
+        return
+
+    if args.sync_local_clean_s3:
+        sync_local_clean_history_to_s3(args.s3_bucket, args.s3_prefix)
+        return
+
     raw_path = ROOT / 'results' / 'webscraping_precios_vino_raw.csv'
     if args.from_existing:
         logger.info('Usando CSV raw existente: %s', raw_path)
@@ -274,6 +423,8 @@ def main():
         enabled=not args.skip_exchange_rate,
         verify_ssl=not args.no_verify_ssl,
     )
+    if args.upload_s3:
+        hydrate_clean_history_from_s3(args.s3_bucket, args.s3_prefix)
     output_paths = run_outputs(raw, exchange_path=exchange_path)
 
     if args.upload_s3:
@@ -299,7 +450,27 @@ def main():
                     ),
                 )
             )
-        upload_files_to_s3(args.s3_bucket, uploads)
+        upload_files_to_s3(
+            args.s3_bucket,
+            [
+                upload
+                for upload in uploads
+                if upload.local_path == raw_path or '/exchange_rate/' in f'/{upload.key}/'
+            ],
+        )
+        clean_upload, latest_upload = uploads[1:3]
+        append_csv_dataset_to_s3(
+            bucket=args.s3_bucket,
+            csv_path=clean_upload.local_path,
+            key=clean_upload.key,
+            dedupe_columns=CLEAN_DEDUPE_COLUMNS,
+        )
+        append_csv_dataset_to_s3(
+            bucket=args.s3_bucket,
+            csv_path=latest_upload.local_path,
+            key=latest_upload.key,
+            dedupe_columns=CLEAN_DEDUPE_COLUMNS,
+        )
         if exchange_path:
             append_exchange_rate_dataset_to_s3(
                 bucket=args.s3_bucket,
