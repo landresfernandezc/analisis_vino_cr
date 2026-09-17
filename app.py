@@ -1,8 +1,7 @@
 from __future__ import annotations
 
-import os
 from io import BytesIO
-from pathlib import Path
+import os
 
 import numpy as np
 import pandas as pd
@@ -15,21 +14,18 @@ PRICE_COLUMN = 'precio_equivalente_750ml_crc'
 FINAL_PRICE_COLUMN = 'precio_final_crc'
 DISCOUNT_COLUMN = 'descuento_pct'
 DATE_COLUMN = 'fecha_extraccion'
-SECRETS_PATHS = [
-    ROOT / '.streamlit' / 'secrets.toml',
-    Path.home() / '.streamlit' / 'secrets.toml',
-]
 
 
 def get_setting(name: str, default: str = '') -> str:
-    """Read Streamlit secrets first, then environment variables."""
-    value = None
-    if any(path.exists() for path in SECRETS_PATHS):
-        try:
-            value = st.secrets.get(name)
-        except Exception:
-            value = None
-    return str(value or os.getenv(name, default))
+    """Read environment variables first, then Streamlit secrets."""
+    value = os.getenv(name)
+    if value:
+        return str(value)
+    try:
+        value = st.secrets.get(name)
+    except Exception:
+        value = None
+    return str(value or default)
 
 
 def build_s3_client():
@@ -326,7 +322,20 @@ if st.sidebar.button('Actualizar datos desde S3'):
     st.cache_data.clear()
     st.rerun()
 
-df_raw, clean_source = load_clean_dataset()
+try:
+    df_raw, clean_source = load_clean_dataset()
+except Exception as exc:
+    st.error('No pude cargar el CSV limpio de precios.')
+    st.info(
+        'En Streamlit Cloud configura estos secrets: '
+        '`AWS_S3_BUCKET`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, '
+        '`AWS_REGION` y, si aplica, `AWS_S3_PREFIX`. '
+        'La app busca primero `clean/webscraping_precios_vino_clean.csv` dentro del prefijo.'
+    )
+    with st.expander('Detalle técnico'):
+        st.exception(exc)
+    st.stop()
+
 df = prepare_dataset(df_raw)
 exchange_df, exchange_source = load_exchange_rate_dataset()
 if exchange_df is not None and DATE_COLUMN in exchange_df.columns:
