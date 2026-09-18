@@ -25,6 +25,11 @@ def get_setting(name: str, default: str = '') -> str:
         value = st.secrets.get(name)
     except Exception:
         value = None
+    if not value:
+        try:
+            value = st.secrets.get('aws', {}).get(name)
+        except Exception:
+            value = None
     return str(value or default)
 
 
@@ -82,7 +87,12 @@ def load_clean_dataset() -> tuple[pd.DataFrame, str]:
         raise FileNotFoundError(f'No se encontro el CSV limpio en S3. Rutas probadas: {missing}')
 
     local_path = ROOT / 'results' / 'webscraping_precios_vino_clean.csv'
-    return pd.read_csv(local_path), str(local_path)
+    if local_path.exists():
+        return pd.read_csv(local_path), str(local_path)
+    raise FileNotFoundError(
+        'No se encontro el CSV local y AWS_S3_BUCKET no esta configurado. '
+        'En produccion Streamlit debe tener configurados los secrets de S3.'
+    )
 
 
 @st.cache_data(ttl=900)
