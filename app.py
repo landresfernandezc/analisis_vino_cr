@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from io import BytesIO
 import os
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
 import streamlit as st
 
-from src.utils.io import ROOT
 
-
+ROOT = Path(__file__).resolve().parent
 PRICE_COLUMN = 'precio_equivalente_750ml_crc'
 FINAL_PRICE_COLUMN = 'precio_final_crc'
 DISCOUNT_COLUMN = 'descuento_pct'
